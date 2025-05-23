@@ -1,0 +1,85 @@
+/* Layout para Desktop (3 colunas) */
+@media (min-width: 768px) {
+  .formGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas de largura igual */
+    gap: 20px; /* Espaçamento entre os itens do grid */
+  }
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="number"] { /* Removido 'select' daqui */
+  width: calc(100% - 22px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+/* Estilos para o react-select (sobrescreve alguns padrões ou adiciona customização) */
+/* Você pode querer ajustar esses estilos de acordo com o design do seu app */
+.cadastroBox :global(.react-select__control) { /* Alvo o controle principal */
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  min-height: 40px !important; /* Ajusta a altura */
+}
+
+.cadastroBox :global(.react-select__value-container) {
+  padding: 0 8px; /* Ajusta o padding interno */
+}
+
+.cadastroBox :global(.react-select__menu) {
+  z-index: 100; /* Garante que o menu suspenso apareça acima de outros elementos */
+}
+
+/* Diminuição do tamanho dos botões */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center; /* Alinha os botões ao centro */
+  flex-wrap: wrap;
+}
+
+.buttons button {
+  padding: 8px 12px; /* Diminui o padding para botões menores */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  flex-grow: 0; /* Não permite que os botões cresçam para ocupar todo o espaço */
+  min-width: unset; /* Remove o min-width anterior */
+  width: 150px; /* Largura fixa para os botões */
+}
+
+.includeButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.includeButton:hover {
+  background-color: #218838;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}

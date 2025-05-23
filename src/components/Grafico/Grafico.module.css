@@ -1,0 +1,23 @@
+
+
+.chartsContainer {
+  display: flex;
+  flex-direction: column; /* Padrão mobile: gráficos um abaixo do outro */
+  gap: 30px; /* Espaçamento entre os gráficos */
+  margin-top: 15px;
+}
+
+.chartItem {
+  flex: 1; /* Garante que cada gráfico ocupe o espaço disponível */
+  min-width: 300px; /* Garante uma largura mínima para o gráfico em telas menores */
+  text-align: center; /* Centraliza o título do gráfico */
+}
+
+/* Layout Desktop: Gráficos lado a lado */
+@media (min-width: 768px) {
+  .chartsContainer {
+    flex-direction: row; /* Desktop: gráficos lado a lado */
+    justify-content: space-around; /* Distribui o espaço entre eles */
+    align-items: flex-start; /* Alinha os gráficos pelo topo */
+  }
+}

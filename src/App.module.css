@@ -1,0 +1,41 @@
+/* Estilos globais básicos */
+.appContainer {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f0f2f5;
+  min-height: 100vh; /* Garante que o container ocupe a altura total da tela */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column; /* Por padrão, em mobile, os itens ficam em coluna */
+  gap: 20px; /* Espaçamento entre as caixas */
+}
+
+/* Layout Desktop */
+@media (min-width: 768px) {
+  .topRow {
+    display: flex;
+    gap: 20px;
+  }
+
+  .topRow > div { /* Estilo para os componentes dentro de .topRow */
+    flex: 1; /* Faz com que os itens se distribuam igualmente na largura */
+  }
+
+  /* No desktop, as caixas Cadastro, Metas, Tabela e Gráfico já ocupam 100% por estarem em coluna */
+}
+
+/* Estilos gerais para todas as caixas */
+.box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}

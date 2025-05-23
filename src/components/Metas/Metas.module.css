@@ -1,0 +1,92 @@
+/* src/components/Metas/Metas.module.css */
+
+/* O .metasBox não precisa de estilos próprios aqui além dos de appStyles.box */
+
+/* Contêiner para o filtro, para dar algum espaçamento */
+.filterGroup {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px; /* Limita a largura do filtro para não ocupar muito espaço */
+}
+
+.filterGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Estilos básicos para o react-select, se necessário customizar além do padrão */
+.react-select__control {
+  border-color: #ccc !important;
+  box-shadow: none !important;
+}
+
+.react-select__control--is-focused {
+  border-color: #007bff !important;
+}
+
+.react-select__multi-value {
+  background-color: #e2e8f0; /* Cor de fundo para as tags de seleção múltipla */
+  border-radius: 4px;
+}
+
+.react-select__multi-value__label {
+  color: #2d3748;
+}
+
+.react-select__multi-value__remove {
+  color: #2d3748;
+  cursor: pointer;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: #cbd5e0;
+  color: #2d3748;
+}
+
+/* Container para tabelas responsivas (opcional, mas boa prática) */
+.tableContainer {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.metasTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.9em;
+  min-width: 700px; /* Ajuste se a tabela ficar muito apertada ou muito larga */
+}
+
+.metasTable th,
+.metasTable td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.metasTable th {
+  background-color: #f2f2f2;
+  color: #555;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap; /* Evita que o texto do cabeçalho quebre em várias linhas */
+}
+
+.metasTable tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Removido estilos .status, .emandamento, .concluida, .naodefinido pois a coluna status foi removida */
+
+/* Estilo para mensagens de erro */
+.errorMessage {
+  color: #dc3545;
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #ffebe9;
+  border-radius: 5px;
+  border: 1px solid #dc3545;
+}
