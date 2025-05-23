@@ -114,7 +114,7 @@ function Cadastro({ onMetaChange }) { // <--- AQUI
         body: JSON.stringify(formData),
       });
 
-      alert('Meta incluída com sucesso! Verifique sua planilha Google Sheets.');
+      alert('Meta incluída com sucesso!');
 
       // Chamada da função de callback para notificar o componente pai
       if (onMetaChange) {
@@ -163,7 +163,7 @@ function Cadastro({ onMetaChange }) { // <--- AQUI
         body: JSON.stringify(deleteData),
       });
 
-      alert(`Requisição para deletar meta "${nomeMeta}" enviada! Verifique sua planilha.`);
+      alert(`Requisição para deletar meta "${nomeMeta}" enviada! `);
 
       // Chamada da função de callback para notificar o componente pai
       if (onMetaChange) {
@@ -180,7 +180,7 @@ function Cadastro({ onMetaChange }) { // <--- AQUI
 
   return (
     <div className={`${appStyles.box} ${styles.cadastroBox}`}>
-      <h2>Minhas Metas</h2>
+      <h2>Metas</h2>
       <Metas />
       <h2>Cadastro de Metas</h2>
       <div className={styles.formGrid}>

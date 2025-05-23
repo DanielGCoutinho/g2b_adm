@@ -6,7 +6,6 @@ import Avatar from './components/Avatar/Avatar';
 import Informacoes from './components/Informacoes/Informacoes';
 import Atingimento from './components/Atingimento/Atingimento';
 import Cadastro from './components/Cadastro/Cadastro';
-import Metas from './components/Metas/Metas';
 import Tabela from './components/Tabela/Tabela';
 import Grafico from './components/Grafico/Grafico';
 
@@ -15,7 +14,7 @@ function App() {
 
   useEffect(() => {
     const fetchSpreadsheetData = async () => {
-      const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQVS_T7asfvhpVOox5lLkzaDCneVt-mgRyB4dWWoUBon26FmKZBnfe_Le-plxyAbw/pub?output=csv";
+      const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbS_7qFSgGIvpJg1Yck5Ozqm2uI7unUlxxjzCjKf1vwVgKZUdrfPCodWhukn2Lf9opNiu9PNniSY0f/pub?gid=1168365614&single=true&output=csv";
 
       try {
         const response = await fetch(spreadsheetUrl);
