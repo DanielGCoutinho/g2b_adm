@@ -91,7 +91,7 @@ function Metas({ refreshKey }) { // <--- AQUI
   if (loading) {
     return (
       <div className={`${appStyles.box} ${styles.metasBox}`}>
-        <h2>Minhas Metas</h2>
+       
         <p>Carregando metas...</p>
       </div>
     );
@@ -100,7 +100,7 @@ function Metas({ refreshKey }) { // <--- AQUI
   if (error) {
     return (
       <div className={`${appStyles.box} ${styles.metasBox}`}>
-        <h2>Minhas Metas</h2>
+        
         <p className={styles.errorMessage}>Erro: {error}</p>
         <p>Por favor, verifique o URL da planilha, os cabeçalhos das colunas ou sua conexão com a internet.</p>
       </div>
@@ -108,8 +108,8 @@ function Metas({ refreshKey }) { // <--- AQUI
   }
 
   return (
-    <div className={`${appStyles.box} ${styles.metasBox}`}>
-      <h2>Minhas Metas</h2>
+    <div  >
+      
 
       <div className={styles.filterGroup}>
         <label htmlFor="vendedorFilter">Filtrar por Vendedor:</label>

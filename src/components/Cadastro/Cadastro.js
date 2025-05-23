@@ -5,9 +5,12 @@ import styles from './Cadastro.module.css';
 import appStyles from '../../App.module.css';
 import Papa from 'papaparse';
 import Select from 'react-select';
+import Metas from '../Metas/Metas';
 
 // Adicione 'onMetaChange' como uma prop
 function Cadastro({ onMetaChange }) { // <--- AQUI
+
+     
   const [data, setData] = useState({
     vendedores: [],
     canais: [],
@@ -177,6 +180,8 @@ function Cadastro({ onMetaChange }) { // <--- AQUI
 
   return (
     <div className={`${appStyles.box} ${styles.cadastroBox}`}>
+      <h2>Minhas Metas</h2>
+      <Metas />
       <h2>Cadastro de Metas</h2>
       <div className={styles.formGrid}>
         <div className={styles.formGroup}>

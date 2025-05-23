@@ -52,7 +52,7 @@ function App() {
           <Atingimento />
         </div>
         <Cadastro /> {/* Cadastro ainda busca os dados por conta própria para as opções de select */}
-        <Metas />
+     
         <Tabela data={spreadsheetData} /> {/* Passando os dados da planilha para Tabela */}
         <Grafico data={spreadsheetData} /> {/* Passando os dados da planilha para Grafico */}
       </main>
