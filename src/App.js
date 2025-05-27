@@ -1,12 +1,13 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import styles from './App.module.css';
-import Papa from 'papaparse'; // Para buscar dados da planilha no App
+import Papa from 'papaparse';
 
 import Avatar from './components/Avatar/Avatar';
 import Informacoes from './components/Informacoes/Informacoes';
 import Atingimento from './components/Atingimento/Atingimento';
 import Cadastro from './components/Cadastro/Cadastro';
-import Tabela from './components/Tabela/Tabela';
+import TabelaDinamica from './components/Tabeladinamica/Tabeladinamica';
 import Grafico from './components/Grafico/Grafico';
 
 function App() {
@@ -23,9 +24,28 @@ function App() {
         Papa.parse(csvText, {
           header: true,
           complete: (results) => {
-            // Filtra linhas onde pelo menos um valor não é vazio
-            const filteredRows = results.data.filter(row => Object.values(row).some(value => value));
-            setSpreadsheetData(filteredRows);
+            const processedData = results.data
+              .filter(row => Object.values(row).some(value => value))
+              .map(row => {
+                const dataString = row['Data'];
+                let parsedDate = null;
+                if (typeof dataString === 'string' && dataString.trim() !== '') {
+                  const parts = dataString.split('/');
+                  if (parts.length === 3) {
+                      // Note que Date(ano, mês-1, dia) - o mês é baseado em 0
+                      parsedDate = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+                  }
+                }
+
+                return {
+                  ...row,
+                  'Vendas total': parseFloat(row['Vendas total']?.replace(',', '.') || 0),
+                  'Quantidade': parseInt(row['Quantidade'] || 0),
+                  'Margem': parseFloat(row['Margem']?.replace(',', '.') || 0),
+                  'Data': parsedDate
+                };
+              });
+            setSpreadsheetData(processedData);
           },
           error: (error) => {
             console.error("Erro ao fazer parse do CSV no App:", error);
@@ -50,10 +70,12 @@ function App() {
           <Informacoes />
           <Atingimento />
         </div>
-        <Cadastro /> {/* Cadastro ainda busca os dados por conta própria para as opções de select */}
-     
-        <Tabela data={spreadsheetData} /> {/* Passando os dados da planilha para Tabela */}
-        <Grafico data={spreadsheetData} /> {/* Passando os dados da planilha para Grafico */}
+        <Cadastro />
+
+        {/* Removido o filtro de data daqui, agora ele estará dentro de TabelaDinamica */}
+      
+        <TabelaDinamica data={spreadsheetData} /> {/* Passamos os dados brutos agora */}
+        <Grafico data={spreadsheetData} /> {/* Grafico também receberá os dados brutos, se precisar de filtragem, ela será interna ou o App.js vai precisar gerenciar os dados filtrados */}
       </main>
     </div>
   );
