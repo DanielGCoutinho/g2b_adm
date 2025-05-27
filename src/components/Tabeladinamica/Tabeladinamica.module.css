@@ -1,0 +1,227 @@
+/* TabelaDinamica.module.css */
+.tabelaDinamicaBox {
+  overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+  margin-top: 20px; /* Adiciona um espaço acima da tabela */
+}
+
+.filterSection {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: calc((100% / 3) - 10px);
+  max-width: 180px;
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  .filterGroup {
+    width: calc((100% / 2) - 10px);
+  }
+}
+
+@media (max-width: 480px) {
+  .filterGroup {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.filterLabel {
+  font-weight: bold;
+  color: #333;
+  font-size: 0.85em;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+/* Estilos para o React-Select */
+.react-select__control {
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  min-height: 34px;
+  font-size: 0.9em;
+}
+
+.react-select__control--is-focused {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+}
+
+.react-select__placeholder {
+  color: #999;
+  font-size: 0.9em;
+}
+
+.react-select__single-value {
+  color: #333;
+  font-size: 0.9em;
+}
+
+.customSelectOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+}
+
+.customSelectOption input[type="checkbox"] {
+  margin: 0;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.customSelectOption label {
+  flex-grow: 1;
+  cursor: pointer;
+  margin: 0;
+}
+
+.react-select__option {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.react-select__option--is-focused {
+  background-color: #f2f2f2;
+}
+
+.react-select__option--is-selected {
+  background-color: #007bff;
+  color: white;
+}
+.react-select__option--is-selected .customSelectOption label {
+  color: white;
+}
+
+.react-select__multi-value {
+  background-color: #e2e6ea;
+  border-radius: 4px;
+  padding: 1px 5px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 2px;
+}
+
+.react-select__multi-value__label {
+  color: #333;
+  font-size: 0.8em;
+}
+
+.react-select__multi-value__remove {
+  color: #666;
+  cursor: pointer;
+  padding: 0 3px;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: #d1d6da;
+  color: #000;
+}
+
+/* NOVOS ESTILOS PARA DRAG-AND-DROP DE AGRUPAMENTOS */
+.groupingOrderSection {
+  display: flex;
+  flex-direction: column; /* Coloca o label em cima da lista arrastável */
+  align-items: flex-start; /* Alinha o conteúdo à esquerda */
+}
+
+.groupingKeysList {
+  display: flex; /* Para que os itens fiquem lado a lado */
+  gap: 10px; /* Espaço entre os itens arrastáveis */
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  min-height: 40px; /* Garante que a área seja visível mesmo vazia */
+  flex-wrap: wrap; /* Permite que os itens quebrem a linha se não houver espaço */
+}
+
+.groupingKeyItem {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px; /* Bordas arredondadas como 'pill' */
+  cursor: grab; /* Altera o cursor para indicar que é arrastável */
+  font-size: 0.9em;
+  font-weight: bold;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none; /* Evita seleção de texto ao arrastar */
+}
+
+.groupingKeyItem:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo quando o item está sendo arrastado */
+.groupingKeyItem.isDragging {
+  background-color: #28a745; /* Uma cor diferente para o item arrastado */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para destacá-lo */
+  transform: rotate(2deg); /* Um pequeno giro para visual */
+}
+
+/* Outros estilos da tabela (sem mudanças) */
+.tableContainer {
+  width: 100%;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.dataTable th,
+.dataTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dataTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.dataTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.dataTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+.expandToggle {
+  cursor: pointer;
+  margin-right: 5px;
+  font-weight: bold;
+  display: inline-block;
+  width: 15px;
+  text-align: center;
+}
+
+.totalRow {
+  background-color: #e0e0e0;
+  font-weight: bold;
+  border-top: 2px solid #555;
+}

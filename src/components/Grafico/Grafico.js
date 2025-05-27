@@ -1,3 +1,4 @@
+// components/Grafico/Grafico.js
 import React from 'react';
 import styles from './Grafico.module.css';
 import appStyles from '../../App.module.css';
@@ -13,10 +14,9 @@ function Grafico({ data }) {
     data.forEach(row => {
       const channel = row.Canal;
       let vendasTotal = 0;
-      if (row['Vendas total']) { // Coluna "Vendas total" com 't' minúsculo
-        const cleanedValue = String(row['Vendas total']).replace(/[^0-9,-]+/g, "").replace(",", ".");
-        vendasTotal = parseFloat(cleanedValue);
-      }
+      // 'Vendas total' já é um número (float) devido ao parsing no App.js
+      // Não precisamos mais do String().replace() ou parseFloat() aqui
+      vendasTotal = row['Vendas total'] || 0; 
 
       if (channel && !isNaN(vendasTotal)) {
         channelSales[channel] = (channelSales[channel] || 0) + vendasTotal;
@@ -37,16 +37,13 @@ function Grafico({ data }) {
     const salesByMonthYear = {};
 
     data.forEach(row => {
-      const dateString = row.Data; // Coluna "Data" no formato dd/mm/aaaa
-      let vendasTotal = 0;
-      if (row['Vendas total']) { // Coluna "Vendas total" com 't' minúsculo
-        const cleanedValue = String(row['Vendas total']).replace(/[^0-9,-]+/g, "").replace(",", ".");
-        vendasTotal = parseFloat(cleanedValue);
-      }
+      const dateObject = row.Data; // AGORA É UM OBJETO DATE OU NULL!
+      let vendasTotal = row['Vendas total'] || 0; // Já é um número, conforme App.js
 
-      if (dateString && !isNaN(vendasTotal)) {
-        // CORREÇÃO AQUI: Deixar o primeiro elemento vazio para ignorar
-        const [, month, year] = dateString.split('/').map(Number);
+      // Verifica se é um objeto Date válido e se vendasTotal é um número
+      if (dateObject instanceof Date && !isNaN(vendasTotal)) {
+        const month = dateObject.getMonth() + 1; // getMonth() retorna 0-11
+        const year = dateObject.getFullYear();
         const monthYearKey = `${month}-${year}`; // Chave para agrupar (ex: "5-2024")
 
         if (!salesByMonthYear[monthYearKey]) {
@@ -68,24 +65,21 @@ function Grafico({ data }) {
     const finalLineData = [];
     const monthOrder = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]; // Ordem para exibir os meses
 
-    const sales2024 = Object.fromEntries(monthOrder.map(month => [month, 0]));
-    const sales2025 = Object.fromEntries(monthOrder.map(month => [month, 0]));
-
+    const salesByYearAndMonth = {}; // Objeto auxiliar para acumular vendas por ano e mês
     sortedData.forEach(item => {
       const monthName = new Date(item.year, item.month - 1).toLocaleString('pt-BR', { month: 'short' });
-
-      if (item.year === 2024) {
-        sales2024[monthName] = item.totalSales;
-      } else if (item.year === 2025) {
-        sales2025[monthName] = item.totalSales;
+      if (!salesByYearAndMonth[monthName]) {
+        salesByYearAndMonth[monthName] = {};
       }
+      salesByYearAndMonth[monthName][item.year] = item.totalSales;
     });
-
+    
+    // Agora, construímos o finalLineData garantindo todos os meses e anos
     monthOrder.forEach(month => {
-        const item = { name: month };
-        item['2024'] = sales2024[month];
-        item['2025'] = sales2025[month];
-        finalLineData.push(item);
+      const item = { name: month };
+      item['2024'] = salesByYearAndMonth[month]?.['2024'] || 0; // Garante 0 se não houver dados
+      item['2025'] = salesByYearAndMonth[month]?.['2025'] || 0; // Garante 0 se não houver dados
+      finalLineData.push(item);
     });
 
     return finalLineData;
