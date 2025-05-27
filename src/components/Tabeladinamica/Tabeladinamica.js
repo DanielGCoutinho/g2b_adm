@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import Select, { components } from 'react-select';
 
 // Importações do react-beautiful-dnd
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 import styles from './Tabeladinamica.module.css';
 import appStyles from '../../App.module.css';
