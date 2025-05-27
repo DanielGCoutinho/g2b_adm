@@ -1,5 +1,5 @@
 // components/TabelaDinamica/TabelaDinamica.js
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react'; // Adicionado useCallback
 import Select, { components } from 'react-select';
 
 // Importações do react-beautiful-dnd
@@ -65,16 +65,20 @@ const TabelaDinamicaLinha = ({ item, level = 0, isExpandedInitially = false }) =
   );
 };
 
-// Custom Option Component para incluir o checkbox (sem alteração)
+// Custom Option Component para incluir o checkbox
 const CustomOption = (props) => {
-  const { innerProps, isSelected, label } = props;
+  const { isSelected, label } = props;
+  // A prop 'innerProps' é parte do 'props' que o react-select passa.
+  // Se ela não é usada aqui, podemos desestruturá-la e não usá-la, ou simplesmente passar 'props' inteiro.
+  // A forma mais comum de lidar com isso é passá-la para o componente de baixo.
   return (
+    // Removido 'innerProps' da desestruturação se não for usar, ou apenas deixar 'props'
     <components.Option {...props}>
       <div className={styles.customSelectOption}>
         <input
           type="checkbox"
           checked={isSelected}
-          onChange={() => {}}
+          onChange={() => {}} // O onChange é tratado pelo react-select via `onClick` do Option
         />
         <label>{label}</label>
       </div>
@@ -126,26 +130,26 @@ function TabelaDinamica({ data }) {
     return { days, months, years };
   }, [data]);
 
-
-  const processData = (dataToProcess) => {
+  // Envolve processData em useCallback para garantir que ela só seja recriada quando suas dependências mudarem
+  const processData = useCallback((dataToProcess, daysFilter, monthsFilter, yearsFilter, keysGrouping) => {
     let currentFilteredData = [...dataToProcess];
 
-    if (selectedDays.length > 0) {
-      const selectedDayValues = selectedDays.map(opt => Number(opt.value));
+    if (daysFilter.length > 0) {
+      const selectedDayValues = daysFilter.map(opt => Number(opt.value));
       currentFilteredData = currentFilteredData.filter(row =>
         row.Data && selectedDayValues.includes(row.Data.getDate())
       );
     }
 
-    if (selectedMonths.length > 0) {
-      const selectedMonthValues = selectedMonths.map(opt => Number(opt.value));
+    if (monthsFilter.length > 0) {
+      const selectedMonthValues = monthsFilter.map(opt => Number(opt.value));
       currentFilteredData = currentFilteredData.filter(row =>
         row.Data && selectedMonthValues.includes(row.Data.getMonth() + 1)
       );
     }
 
-    if (selectedYears.length > 0) {
-      const selectedYearValues = selectedYears.map(opt => Number(opt.value));
+    if (yearsFilter.length > 0) {
+      const selectedYearValues = yearsFilter.map(opt => Number(opt.value));
       currentFilteredData = currentFilteredData.filter(row =>
         row.Data && selectedYearValues.includes(row.Data.getFullYear())
       );
@@ -168,7 +172,8 @@ function TabelaDinamica({ data }) {
       currentLevel.totalMargem += row['Margem'];
       currentLevel.countMargem += 1;
 
-      groupingKeys.forEach(key => {
+      // Usando 'keysGrouping' que é passado como argumento
+      keysGrouping.forEach(key => {
         const groupName = row[key] || 'Não Informado';
         if (!currentLevel.children[groupName]) {
           currentLevel.children[groupName] = {
@@ -201,9 +206,14 @@ function TabelaDinamica({ data }) {
     calculateAverages(root);
 
     return root;
-  };
+  }, []); // As dependências de processData são definidas aqui para useCallback, que é nulo se a função não depender de nada do escopo.
 
-  const processedTree = useMemo(() => processData(data), [data, selectedDays, selectedMonths, selectedYears, groupingKeys]);
+  // A linha 206 original era esta:
+  // const processedTree = useMemo(() => processData(data), [data, selectedDays, selectedMonths, selectedYears, groupingKeys, processData]);
+
+  // Agora, a chamada a processData passará explicitamente as dependências
+  const processedTree = useMemo(() => processData(data, selectedDays, selectedMonths, selectedYears, groupingKeys),
+                                [data, selectedDays, selectedMonths, selectedYears, groupingKeys, processData]);
 
   // Função para reordenar os itens após o drag-and-drop com react-beautiful-dnd
   const onDragEnd = (result) => {
