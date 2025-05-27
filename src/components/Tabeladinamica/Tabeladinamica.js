@@ -1,9 +1,13 @@
 // components/TabelaDinamica/TabelaDinamica.js
-import React, { useState, useMemo, useCallback } from 'react'; // Adicionado useCallback
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import Select, { components } from 'react-select';
 
 // Importações do react-beautiful-dnd
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
+// IMPORTAÇÕES DO FONT AWESOME (NOVO)
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Tabeladinamica.module.css';
 import appStyles from '../../App.module.css';
@@ -68,11 +72,7 @@ const TabelaDinamicaLinha = ({ item, level = 0, isExpandedInitially = false }) =
 // Custom Option Component para incluir o checkbox
 const CustomOption = (props) => {
   const { isSelected, label } = props;
-  // A prop 'innerProps' é parte do 'props' que o react-select passa.
-  // Se ela não é usada aqui, podemos desestruturá-la e não usá-la, ou simplesmente passar 'props' inteiro.
-  // A forma mais comum de lidar com isso é passá-la para o componente de baixo.
   return (
-    // Removido 'innerProps' da desestruturação se não for usar, ou apenas deixar 'props'
     <components.Option {...props}>
       <div className={styles.customSelectOption}>
         <input
@@ -86,7 +86,6 @@ const CustomOption = (props) => {
   );
 };
 
-
 // Componente principal da tabela dinâmica
 function TabelaDinamica({ data }) {
   // Use um id estável para o Droppable
@@ -96,6 +95,62 @@ function TabelaDinamica({ data }) {
   const [selectedDays, setSelectedDays] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
+
+  // Estado para controlar o modo tela cheia
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  // Ref para o elemento que queremos expandir para tela cheia
+  const tableContainerRef = useRef(null);
+
+  // Efeito para lidar com mudanças no modo tela cheia e eventos de escape
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      // Verifica se o documento está em modo tela cheia e atualiza o estado
+      setIsFullScreen(document.fullscreenElement != null);
+    };
+
+    // Adiciona o listener para o evento de mudança de tela cheia
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullScreenChange); // Para compatibilidade com Webkit
+    document.addEventListener('mozfullscreenchange', handleFullScreenChange);   // Para compatibilidade com Mozilla
+    document.addEventListener('msfullscreenchange', handleFullScreenChange);     // Para compatibilidade com MS
+
+    // Remove os listeners quando o componente é desmontado
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+    };
+  }, []); // Array de dependências vazio para que o efeito seja executado apenas uma vez
+
+  // Função para alternar o modo tela cheia
+  const toggleFullScreen = () => {
+    if (tableContainerRef.current) {
+      if (!document.fullscreenElement) {
+        // Entra em modo tela cheia
+        if (tableContainerRef.current.requestFullscreen) {
+          tableContainerRef.current.requestFullscreen();
+        } else if (tableContainerRef.current.mozRequestFullScreen) { /* Firefox */
+          tableContainerRef.current.mozRequestFullScreen();
+        } else if (tableContainerRef.current.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+          tableContainerRef.current.webkitRequestFullscreen();
+        } else if (tableContainerRef.current.msRequestFullscreen) { /* IE/Edge */
+          tableContainerRef.current.msRequestFullscreen();
+        }
+      } else {
+        // Sai do modo tela cheia
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+          document.msExitFullScreen(); // Corrigido para msExitFullScreen
+        }
+      }
+    }
+  };
 
   const filterOptions = useMemo(() => {
     const uniqueDays = new Set();
@@ -130,7 +185,6 @@ function TabelaDinamica({ data }) {
     return { days, months, years };
   }, [data]);
 
-  // Envolve processData em useCallback para garantir que ela só seja recriada quando suas dependências mudarem
   const processData = useCallback((dataToProcess, daysFilter, monthsFilter, yearsFilter, keysGrouping) => {
     let currentFilteredData = [...dataToProcess];
 
@@ -206,14 +260,10 @@ function TabelaDinamica({ data }) {
     calculateAverages(root);
 
     return root;
-  }, []); // As dependências de processData são definidas aqui para useCallback, que é nulo se a função não depender de nada do escopo.
+  }, []);
 
-  // A linha 206 original era esta:
-  // const processedTree = useMemo(() => processData(data), [data, selectedDays, selectedMonths, selectedYears, groupingKeys, processData]);
-
-  // Agora, a chamada a processData passará explicitamente as dependências
   const processedTree = useMemo(() => processData(data, selectedDays, selectedMonths, selectedYears, groupingKeys),
-                                [data, selectedDays, selectedMonths, selectedYears, groupingKeys, processData]);
+                                  [data, selectedDays, selectedMonths, selectedYears, groupingKeys, processData]);
 
   // Função para reordenar os itens após o drag-and-drop com react-beautiful-dnd
   const onDragEnd = (result) => {
@@ -229,10 +279,26 @@ function TabelaDinamica({ data }) {
     setGroupingKeys(newGroupingKeys);
   };
 
-
   return (
-    <div className={`${appStyles.box} ${styles.tabelaDinamicaBox}`}>
-      <h2>Desempenho Detalhado (Tabela Dinâmica)</h2>
+    // Adiciona a ref e a classe condicional `isFullScreen`
+    <div ref={tableContainerRef} className={`${appStyles.box} ${styles.tabelaDinamicaBox} ${isFullScreen ? styles.isFullScreen : ''}`}>
+      <div className={styles.headerWithFullScreen}> {/* Div para alinhar título e botão */}
+        <h2>Desempenho Detalhado (Tabela Dinâmica)</h2>
+        {/* NOVO: Botão para alternar tela cheia com ícones do Font Awesome */}
+        <button
+          onClick={toggleFullScreen}
+          className={styles.fullScreenButton}
+          title={isFullScreen ? 'Sair da Tela Cheia' : 'Ver em Tela Cheia'} // Para acessibilidade (tooltip)
+        >
+          {/* Renderiza o ícone de expandir se não estiver em tela cheia,
+              e o ícone de comprimir se estiver em tela cheia */}
+          <FontAwesomeIcon
+            icon={isFullScreen ? faCompress : faExpand}
+            style={{ fontSize: '24px' }} // Ajuste o tamanho do ícone aqui
+          />
+        </button>
+      </div>
+
 
       {/* Seção de filtros multiselect (Dia, Mês, Ano) */}
       <div className={styles.filterSection}>

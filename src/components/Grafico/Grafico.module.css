@@ -1,23 +1,180 @@
+/* components/Grafico/Grafico.module.css */
 
-
+/* --- Estilos Existentes (Mantidos) --- */
 .chartsContainer {
+  /* Este container não será mais flexbox para múltiplos gráficos */
+  /* Ele será o container principal do carrossel, centralizando o item ativo */
   display: flex;
-  flex-direction: column; /* Padrão mobile: gráficos um abaixo do outro */
-  gap: 30px; /* Espaçamento entre os gráficos */
+  justify-content: center; /* Centraliza o gráfico ativo */
+  align-items: center; /* Alinha verticalmente */
   margin-top: 15px;
+  min-height: 350px; /* Garante um espaço mínimo para o gráfico e botões */
+  position: relative; /* Para posicionar os botões de navegação */
 }
 
+/* Removido ou ocultado, pois não é mais usado para renderização ativa */
 .chartItem {
-  flex: 1; /* Garante que cada gráfico ocupe o espaço disponível */
-  min-width: 300px; /* Garante uma largura mínima para o gráfico em telas menores */
-  text-align: center; /* Centraliza o título do gráfico */
+  display: none;
 }
 
-/* Layout Desktop: Gráficos lado a lado */
-@media (min-width: 768px) {
+
+/* Container geral para todos os filtros (Vendedor, Cliente, Item, Canal, Mês, Ano) */
+.filtersContainer {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem linha */
+  gap: 15px; /* Espaçamento entre os filtros */
+  margin-bottom: 20px; /* Espaço abaixo dos filtros e acima dos gráficos */
+  justify-content: center; /* Centraliza os filtros */
+  padding: 10px; /* Adiciona um pouco de padding */
+  background-color: #f9f9f9; /* Um fundo claro para destacar os filtros */
+  border-radius: 8px; /* Cantos arredondados */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave */
+}
+
+.filtersContainer label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #333;
+  margin-right: 0;
+}
+
+.filtersContainer select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.9em;
+  min-width: 120px;
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  background-image: none;
+  background-repeat: initial;
+  background-position: initial;
+  background-size: initial;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.filtersContainer select:focus {
+  border-color: #8884d8;
+  box-shadow: 0 0 0 3px rgba(136, 132, 216, 0.2);
+}
+
+/* --- ESTILOS PARA O CARROSSEL --- */
+.carouselContainer {
+  /* Este container agora é APENAS para o conteúdo do gráfico dentro do carrossel */
+  display: flex;
+  justify-content: center; /* Centraliza o item do carrossel */
+  align-items: center;
+  width: 100%; /* Ocupa a largura total do pai */
+  max-width: 700px; /* Manter este limite para o conteúdo do gráfico */
+  margin: 20px auto; /* Centraliza o carrossel na página */
+  padding: 0; /* Remove padding que pode causar sobreposição */
+  box-sizing: border-box;
+}
+
+.chartCarouselItem {
+  /* Ajustado para garantir mais espaço e evitar cortes de legenda */
+  flex: 1;
+  min-width: 300px; /* Garante que o gráfico tenha espaço suficiente */
+  max-width: 100%; /* Ajusta à largura do container */
+  padding: 0 20px; /* Adiciona padding interno para a legenda não cortar */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.carouselButton {
+  background-color: #8884d8; /* Cor primária */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Botão redondo */
+  width: 40px;
+  height: 40px;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+  z-index: 10; /* Garante que os botões fiquem acima do gráfico */
+
+  /* POSICIONAMENTO ABSOLUTO DENTRO DE .chartsContainer */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carouselButton:hover {
+  background-color: #726bc1; /* Escurece no hover */
+}
+
+.carouselButton:active {
+  background-color: #6059a6; /* Mais escuro no clique */
+  /* REMOVIDA A LINHA: transform: translateY(1px); */
+}
+
+/* Botões de navegação específicos para posicionamento */
+.carouselButton:first-of-type,
+.carouselButton.prevButton { /* Aplica para o primeiro botão ou o com classe prevButton */
+  left: 5px; /* Distância da esquerda */
+}
+
+.carouselButton:last-of-type,
+.carouselButton.nextButton { /* Aplica para o último botão ou o com classe nextButton */
+  right: 5px; /* Distância da direita */
+}
+
+/* Layout para telas menores: Ajustes para botões e container do gráfico */
+@media (max-width: 767px) {
   .chartsContainer {
-    flex-direction: row; /* Desktop: gráficos lado a lado */
-    justify-content: space-around; /* Distribui o espaço entre eles */
-    align-items: flex-start; /* Alinha os gráficos pelo topo */
+    flex-direction: column; /* Empilha o gráfico e os botões */
+    justify-content: flex-start; /* Alinha no topo quando empilhado */
+    min-height: auto; /* Não precisa de altura mínima fixa em mobile */
+  }
+
+  .carouselContainer {
+    flex-direction: column; /* Manter o conteúdo do carrossel empilhado */
+    width: 100%; /* Ocupa toda a largura */
+    padding: 0;
+    max-width: 100%; /* Garante que ocupe a largura total disponível */
+  }
+
+  .chartCarouselItem {
+    width: 100%; /* Ocupa a largura total disponível em mobile */
+    min-width: auto; /* Permite que encolha abaixo de 300px se necessário */
+    padding: 0 10px; /* Ajusta padding para mobile */
+  }
+
+  .carouselButton {
+    position: static; /* Volta a ser um elemento estático no fluxo do documento */
+    transform: none; /* Remove a transformação de posicionamento absoluto */
+    width: calc(100% - 20px); /* Ocupa a largura total, menos o padding do pai */
+    max-width: 300px; /* Limita a largura dos botões para não ficarem muito grandes */
+    height: 50px;
+    border-radius: 8px; /* Botões retangulares em mobile */
+    font-size: 1.2em;
+    margin: 0 auto; /* Centraliza os botões */
+  }
+
+  /* Ajusta a ordem dos botões em mobile */
+  .carouselButton:first-of-type,
+  .carouselButton.prevButton {
+    order: 1; /* Faz o botão "Anterior" aparecer primeiro */
+  }
+
+  .carouselButton:last-of-type,
+  .carouselButton.nextButton {
+    order: 3; /* Faz o botão "Próximo" aparecer por último */
+  }
+
+  .chartCarouselItem {
+    order: 2; /* Faz o gráfico aparecer entre os botões em mobile */
   }
 }
