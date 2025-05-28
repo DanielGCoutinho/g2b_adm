@@ -9,6 +9,8 @@ import Atingimento from './components/Atingimento/Atingimento';
 import Cadastro from './components/Cadastro/Cadastro';
 import TabelaDinamica from './components/Tabeladinamica/Tabeladinamica';
 import Grafico from './components/Grafico/Grafico';
+// Importe o novo componente RankingVendedores
+import RankingVendedores from './components/RankingVendedores/RankingVendedores'; // Ajuste o caminho se necessário
 
 function App() {
   const [spreadsheetData, setSpreadsheetData] = useState([]);
@@ -71,11 +73,14 @@ function App() {
           <Atingimento />
         </div>
         <Cadastro />
-
+        
         {/* Removido o filtro de data daqui, agora ele estará dentro de TabelaDinamica */}
       
         <TabelaDinamica data={spreadsheetData} /> {/* Passamos os dados brutos agora */}
         <Grafico data={spreadsheetData} /> {/* Grafico também receberá os dados brutos, se precisar de filtragem, ela será interna ou o App.js vai precisar gerenciar os dados filtrados */}
+        
+        {/* Adicione o componente RankingVendedores aqui */}
+        <RankingVendedores />
       </main>
     </div>
   );

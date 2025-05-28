@@ -1,0 +1,162 @@
+/* src/components/RankingVendedores/RankingVendedores.module.css */
+
+.rankingContainer {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.rankingContainer h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.5em;
+}
+
+.rankingList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaçamento entre os itens do ranking */
+}
+
+.rankingItem {
+    display: flex;
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    padding: 8px 0; /* Espaçamento vertical interno */
+    background-color: #f8f8f8; /* Cor de fundo clara para cada item */
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra suave para o item */
+}
+
+.rankingItem:not(:last-child) {
+    margin-bottom: 10px; /* Espaçamento entre os blocos dos itens */
+}
+
+/* 1. Bloco do Número do Ranking */
+.rankNumberBlock {
+    background-color: #28a745; /* Verde para o fundo do bloco */
+    color: white;
+    font-weight: bold;
+    font-size: 1.3em;
+    border-radius: 5px;
+    padding: 8px 12px; /* Aumenta o preenchimento */
+    margin-left: 15px; /* Espaçamento da esquerda */
+    margin-right: 15px; /* Espaçamento da direita */
+    display: flex; /* Para centralizar o número */
+    justify-content: center;
+    align-items: center;
+    min-width: 40px; /* Largura mínima para o bloco */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidade */
+}
+
+.rankNumber {
+    /* O número em si, já está dentro do bloco */
+}
+
+/* Cores diferentes para os top 3, similar ao exemplo do carro */
+.rankingItem:nth-child(1) .rankNumberBlock { background-color: #28a745; } /* Verde - 1º */
+.rankingItem:nth-child(2) .rankNumberBlock { background-color: #6c757d; } /* Cinza - 2º */
+.rankingItem:nth-child(3) .rankNumberBlock { background-color: #007bff; } /* Azul - 3º */
+
+/* 2. Detalhes do Vendedor (Nome e Pontos) */
+.sellerDetails {
+    display: flex;
+    flex-direction: column; /* Nome em cima, pontos abaixo */
+    /* *** MODIFICAÇÃO AQUI *** */
+    /* Define uma largura fixa ou base flexível para este bloco */
+    flex-basis: 150px; /* Exemplo: define uma largura base de 150px */
+    min-width: 120px; /* Garante que não fique muito pequeno */
+    max-width: 200px; /* Garante que não fique muito grande */
+    margin-right: 15px; /* Espaçamento antes da barra */
+}
+
+.sellerName {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em; /* Fonte um pouco maior para o nome */
+    margin-bottom: 2px; /* Espaçamento entre nome e pontos */
+    white-space: nowrap; /* Evita que o nome quebre linha */
+    overflow: hidden; /* Esconde o que exceder */
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for cortado */
+}
+
+.sellerPointsDetail {
+    font-size: 0.85em; /* Fonte menor para o detalhe dos pontos */
+    color: #777;
+}
+
+/* 3. Barra de Progresso com Valor */
+.progressBarWrapper {
+    flex-grow: 1; /* A barra de progresso ocupa o restante do espaço */
+    position: relative; /* Para posicionar o valor sobre a barra */
+    height: 35px; /* Altura da barra, mais proeminente */
+    background-color: #e0e0e0; /* Cor de fundo da barra */
+    border-radius: 5px;
+    margin-right: 15px; /* Espaçamento da direita */
+    display: flex; /* Para alinhar o texto dentro da barra */
+    align-items: center; /* Alinha verticalmente */
+    justify-content: flex-end; /* Alinha o texto para a direita */
+    overflow: hidden; /* Garante que o preenchimento não "vaze" */
+}
+
+.progressBarFill {
+    background-color: #66bb6a; /* Um verde um pouco mais claro para o preenchimento */
+    height: 100%;
+    border-radius: 5px;
+    position: absolute; /* Posiciona sobre o wrapper */
+    top: 0;
+    left: 0;
+    transition: width 0.8s ease-out; /* Animação suave para a largura */
+    z-index: 1; /* Garante que a barra esteja abaixo do texto */
+}
+
+.progressBarValue {
+    color: white; /* Cor do texto do valor */
+    font-weight: bold;
+    font-size: 1.1em; /* Tamanho do texto do valor */
+    padding-right: 10px; /* Espaçamento à direita do texto */
+    z-index: 2; /* Garante que o texto esteja sobre a barra */
+    position: relative; /* Para que o z-index funcione */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para melhor legibilidade */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .rankingItem {
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        justify-content: center; /* Centraliza itens quando quebram linha */
+        text-align: center;
+        padding: 10px;
+    }
+
+    .rankNumberBlock {
+        margin: 0 auto 10px auto; /* Centraliza e adiciona margem inferior */
+        min-width: 35px;
+        font-size: 1.1em;
+        padding: 6px 10px;
+    }
+
+    .sellerDetails {
+        flex-basis: 100%; /* Ocupa a largura total */
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .progressBarWrapper {
+        flex-basis: 100%; /* Ocupa a largura total */
+        margin-right: 0;
+        height: 30px; /* Altura menor em mobile */
+    }
+
+    .progressBarValue {
+        font-size: 1em;
+        padding-right: 8px;
+    }
+}
+
+/* Cores específicas para os top 3 vendedores */
+.rankingItem:nth-child(1) .progressBarFill { background-color: #28a745; } /* Verde */
+.rankingItem:nth-child(2) .progressBarFill { background-color: #6c757d; } /* Cinza */
+.rankingItem:nth-child(3) .progressBarFill { background-color: #007bff; } /* Azul */
